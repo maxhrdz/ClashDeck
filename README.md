@@ -4,9 +4,11 @@
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES_Modules-F7DF1E?logo=javascript&logoColor=111)](https://developer.mozilla.org/docs/Web/JavaScript)
 [![Playwright](https://img.shields.io/badge/E2E-Playwright-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![PWA](https://img.shields.io/badge/PWA-installable-5A0FC8?logo=pwa&logoColor=white)](https://web.dev/explore/progressive-web-apps)
-[![Vercel](https://img.shields.io/badge/deploy-Vercel-black?logo=vercel)](https://vercel.com/)
+[![Vercel](https://img.shields.io/badge/live-Vercel-black?logo=vercel)](https://clash-deck-dun.vercel.app/)
 
 A cloud-ready, installable Clash Royale deck intelligence tool built with HTML, CSS, and modular vanilla JavaScript. Build an eight-card deck to receive an explainable balance score, archetype detection, role coverage, profile metrics, and actionable recommendations.
+
+**Live application:** [clash-deck-dun.vercel.app](https://clash-deck-dun.vercel.app/)
 
 ![Royale Deck Analyzer hero](assets/screenshots/royale-lab-hero.png)
 
@@ -72,18 +74,18 @@ The news aggregator separates new-card and game updates from ranked and competit
 
 ```mermaid
 flowchart LR
-  UI[Browser UI] --> Cards[/api/cards]
-  UI --> Decks[/api/pro-decks]
-  UI --> News[/api/news]
-  Cards --> Client[Hardened API client]
+  UI["Browser UI"] --> Cards["/api/cards"]
+  UI --> Decks["/api/pro-decks"]
+  UI --> News["/api/news"]
+  Cards --> Client["Hardened API client"]
   Decks --> Client
-  News --> Sources[Official Supercell + CR Esports news]
-  Client --> Proxy[Official API through RoyaleAPI proxy]
-  UI -. fallback .-> Community[Community catalog]
-  UI -. offline .-> Local[Local reference data]
-  UI --> Analyzer[Explainable scoring engine]
-  UI --> Meta[Weighted meta similarity]
-  UI --> Storage[URL + localStorage]
+  News --> Sources["Official Supercell and CR Esports news"]
+  Client --> Proxy["Official API through RoyaleAPI proxy"]
+  UI -.-> Community["Community catalog fallback"]
+  UI -.-> Local["Local offline reference data"]
+  UI --> Analyzer["Explainable scoring engine"]
+  UI --> Meta["Weighted meta similarity"]
+  UI --> Storage["URL and localStorage"]
 ```
 
 The analyzer and meta comparison engine are intentionally isolated from the DOM. This makes their rules deterministic and directly testable. The serverless API client centralizes authentication, timeouts, error mapping, and upstream request behavior.
@@ -244,19 +246,6 @@ Never commit the token or place it in browser JavaScript. A template is provided
 ├── service-worker.js
 └── vercel.json
 ```
-
-## CV-ready description
-
-> Built a production-oriented Clash Royale deck analysis PWA with modular vanilla JavaScript, secure serverless API integration, multi-source fallbacks, explainable scoring, weighted meta-deck similarity, shareable state, Playwright end-to-end tests, and GitHub Actions CI.
-
-### Interview talking points
-
-- Why a serverless proxy is required to keep the official API token private.
-- How the application remains useful during upstream failures.
-- Why the scoring and similarity models are transparent heuristics rather than win-rate predictions.
-- How pure domain modules make the analysis deterministic and testable.
-- How browser tests caught and prevent the Step 3 hidden-state regression.
-- How caching balances freshness, API limits, and serverless execution cost.
 
 ## Engineering trade-offs
 
