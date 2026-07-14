@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="RoyaleLab logo">
+  <defs>
+    <linearGradient id="background" x1="60" y1="40" x2="450" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#72d2ff"/>
+      <stop offset="0.5" stop-color="#879cff"/>
+      <stop offset="1" stop-color="#f275d0"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="128" fill="#090d1f"/>
+  <rect x="40" y="40" width="432" height="432" rx="108" fill="url(#background)"/>
+  <path d="M145 374V137h105c64 0 106 33 106 91 0 38-19 66-52 80l70 66h-82l-57-56h-26v56h-64Zm64-112h38c26 0 41-12 41-34 0-23-15-34-41-34h-38v68Z" fill="#071021"/>
+</svg>

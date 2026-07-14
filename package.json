@@ -1,0 +1,19 @@
+{
+  "name": "royale-deck-analyzer",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check js/app.js && node --check js/api.js && node --check js/analyzer.js && node --check js/config.js && node --check js/deck-storage.js && node --check js/pro-decks.js && node --check js/meta-analysis.js && node --check js/news.js && node --check api/_clash-client.js && node --check api/cards.js && node --check api/pro-decks.js && node --check api/news.js && node --check api/health.js && node --check service-worker.js && node --check playwright.config.js && node --check scripts/capture-screenshots.mjs",
+    "test": "node --test",
+    "test:e2e": "playwright test",
+    "screenshots": "node scripts/capture-screenshots.mjs",
+    "ci": "npm run check && npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}
