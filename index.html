@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="Build an eight-card Clash Royale deck and get instant balance insights and recommendations."
+    >
+    <meta name="theme-color" content="#1567a8">
+    <title>Royale Deck Analyzer</title>
+    <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="page-glow page-glow--one" aria-hidden="true"></div>
+    <div class="page-glow page-glow--two" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <nav class="nav shell" aria-label="Main navigation">
+        <a class="brand" href="#" aria-label="Royale Deck Analyzer home">
+          <span class="brand__mark" aria-hidden="true">♛</span>
+          <span>Royale<span class="brand__accent">Lab</span></span>
+        </a>
+        <div class="nav__actions">
+          <button id="install-app" class="nav__install" type="button" hidden>Install app</button>
+          <a class="nav__link" href="#news">News</a>
+          <a class="nav__link" href="#about">How it works</a>
+        </div>
+      </nav>
+
+      <div class="hero shell">
+        <div class="hero__copy">
+          <p class="eyebrow">Enter the deck arena</p>
+          <h1>Build your deck.<br><span>Rule the arena.</span></h1>
+          <p class="hero__description">
+            Create an 8-card Clash Royale deck and instantly check its elixir,
+            air defense, win conditions, and overall balance.
+          </p>
+          <div class="hero__badges" aria-label="Project highlights">
+            <span><i class="status-dot"></i> Live card catalog</span>
+            <span>Cloud-ready PWA</span>
+            <span>Tested vanilla JavaScript</span>
+          </div>
+        </div>
+
+        <div class="hero__visual" aria-hidden="true">
+          <div class="mini-card mini-card--back"></div>
+          <div class="mini-card mini-card--middle"></div>
+          <div class="mini-card mini-card--front">
+            <span class="mini-card__crown">♛</span>
+            <strong>8</strong>
+            <small>CARDS</small>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="shell app-layout">
+      <section class="panel catalog-panel" aria-labelledby="catalog-title">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Step 01</p>
+            <h2 id="catalog-title">Choose your cards</h2>
+            <p>Pick up to eight cards. Select a chosen card again to remove it.</p>
+          </div>
+          <div id="data-status" class="data-status" role="status" aria-live="polite">
+            <span class="data-status__dot"></span>
+            Loading card data…
+          </div>
+        </div>
+
+        <div class="catalog-toolbar">
+          <label class="search-field" for="card-search">
+            <span class="sr-only">Search cards</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18">
+              <path d="m21 21-4.35-4.35m2.35-5.15A7.5 7.5 0 1 1 4 11.5a7.5 7.5 0 0 1 15 0Z"></path>
+            </svg>
+            <input id="card-search" type="search" placeholder="Search cards…" autocomplete="off">
+          </label>
+
+          <label class="filter-field" for="type-filter">
+            <span class="sr-only">Filter by card type</span>
+            <select id="type-filter">
+              <option value="all">All types</option>
+              <option value="Troop">Troops</option>
+              <option value="Spell">Spells</option>
+              <option value="Building">Buildings</option>
+            </select>
+          </label>
+
+          <button id="refresh-data" class="button button--ghost button--compact" type="button">
+            Refresh data
+          </button>
+        </div>
+
+        <div class="catalog-meta">
+          <span id="catalog-count">Loading cards…</span>
+          <span id="selected-summary">0 of 8 selected</span>
+        </div>
+
+        <div id="card-grid" class="card-grid" aria-live="polite" aria-busy="true">
+          <div class="loading-state">
+            <span class="loader" aria-hidden="true"></span>
+            <p>Opening the card collection…</p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="deck-column" aria-label="Deck builder and analysis">
+        <section class="panel deck-panel" aria-labelledby="deck-title">
+          <div class="deck-heading">
+            <div>
+              <p class="section-kicker">Step 02</p>
+              <h2 id="deck-title">Your deck</h2>
+            </div>
+            <span id="deck-count" class="deck-count">0 / 8</span>
+          </div>
+
+          <div id="deck-slots" class="deck-slots" aria-live="polite"></div>
+
+          <div class="deck-actions">
+            <button id="smart-deck" class="button button--primary" type="button">
+              Build a sample deck
+            </button>
+            <button id="share-deck" class="button button--ghost" type="button" disabled>
+              Copy link
+            </button>
+            <button id="clear-deck" class="button button--ghost" type="button" disabled>
+              Clear
+            </button>
+          </div>
+        </section>
+
+        <section class="panel analysis-panel" aria-labelledby="analysis-title">
+          <div class="analysis-heading">
+            <div>
+              <p class="section-kicker">Step 03</p>
+              <h2 id="analysis-title">Deck analysis</h2>
+            </div>
+            <span id="deck-grade" class="grade grade--pending">Pending</span>
+          </div>
+
+          <div id="analysis-empty" class="analysis-empty">
+            <div class="analysis-empty__icon" aria-hidden="true">↗</div>
+            <strong>Add 8 cards to unlock your report</strong>
+            <p>Your live stats will update as you build.</p>
+          </div>
+
+          <div id="analysis-content" class="analysis-content" hidden>
+            <article class="archetype-card">
+              <div class="archetype-card__heading">
+                <span>Detected archetype</span>
+                <strong id="archetype-name">—</strong>
+              </div>
+              <p id="archetype-description"></p>
+              <div class="metric-list" aria-label="Deck profile metrics">
+                <div class="metric-row">
+                  <div><span>Offense</span><strong data-metric-value="offense">0</strong></div>
+                  <div class="metric-track"><span data-metric-bar="offense"></span></div>
+                </div>
+                <div class="metric-row">
+                  <div><span>Defense</span><strong data-metric-value="defense">0</strong></div>
+                  <div class="metric-track"><span data-metric-bar="defense"></span></div>
+                </div>
+                <div class="metric-row">
+                  <div><span>Cycle</span><strong data-metric-value="cycle">0</strong></div>
+                  <div class="metric-track"><span data-metric-bar="cycle"></span></div>
+                </div>
+                <div class="metric-row">
+                  <div><span>Versatility</span><strong data-metric-value="versatility">0</strong></div>
+                  <div class="metric-track"><span data-metric-bar="versatility"></span></div>
+                </div>
+              </div>
+            </article>
+
+            <div class="score-row">
+              <div>
+                <span class="score-label">Balance score</span>
+                <strong id="balance-score" class="balance-score">—</strong>
+              </div>
+              <div class="score-meter" aria-hidden="true">
+                <span id="score-meter-fill"></span>
+              </div>
+            </div>
+
+            <div class="stat-grid">
+              <article class="stat-card">
+                <span class="stat-card__icon stat-card__icon--elixir" aria-hidden="true">◆</span>
+                <span>Average elixir</span>
+                <strong id="average-elixir">0.0</strong>
+              </article>
+              <article class="stat-card">
+                <span class="stat-card__icon" aria-hidden="true">⌁</span>
+                <span>Air answers</span>
+                <strong id="air-defense-count">0</strong>
+              </article>
+              <article class="stat-card">
+                <span class="stat-card__icon" aria-hidden="true">◎</span>
+                <span>Win conditions</span>
+                <strong id="win-condition-count">0</strong>
+              </article>
+              <article class="stat-card">
+                <span class="stat-card__icon" aria-hidden="true">✦</span>
+                <span>Spells</span>
+                <strong id="spell-count">0</strong>
+              </article>
+            </div>
+
+            <article id="meta-match" class="meta-match" hidden>
+              <div class="meta-match__score">
+                <span>Strategic similarity</span>
+                <strong id="meta-similarity">—</strong>
+              </div>
+              <div class="meta-match__copy">
+                <span>Closest arena deck</span>
+                <strong id="meta-deck-name">—</strong>
+                <p id="meta-explanation"></p>
+              </div>
+            </article>
+
+            <div class="checks" aria-label="Deck checks">
+              <div id="air-check" class="check-row"></div>
+              <div id="win-check" class="check-row"></div>
+              <div id="cycle-check" class="check-row"></div>
+            </div>
+
+            <div class="recommendations">
+              <h3>Coach notes</h3>
+              <ul id="recommendation-list"></ul>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <section class="pro-showcase shell" aria-labelledby="pro-title">
+      <div class="pro-showcase__heading">
+        <div>
+          <p class="section-kicker">Battle deck gallery</p>
+          <h2 id="pro-title">Decks from the arena</h2>
+          <p>Load a proven deck, inspect its strengths, then make it your own.</p>
+        </div>
+        <div id="pro-status" class="data-status" role="status" aria-live="polite">
+          <span class="data-status__dot"></span>
+          Loading deck examples…
+        </div>
+      </div>
+      <div id="pro-deck-grid" class="pro-deck-grid" aria-live="polite" aria-busy="true">
+        <div class="pro-loading">
+          <span class="loader" aria-hidden="true"></span>
+          <p>Scouting the arena…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="news" class="news-showcase shell" aria-labelledby="news-title">
+      <div class="news-showcase__heading">
+        <div>
+          <p class="section-kicker">Live from the arena</p>
+          <h2 id="news-title">Royale news</h2>
+          <p>Follow new cards, balance updates, ranked changes, and competitive Clash Royale.</p>
+        </div>
+        <div id="news-status" class="data-status" role="status" aria-live="polite">
+          <span class="data-status__dot"></span>
+          Loading official news…
+        </div>
+      </div>
+
+      <div class="news-filters" role="group" aria-label="Filter news">
+        <button class="news-filter is-active" type="button" data-news-filter="all" aria-pressed="true">All news</button>
+        <button class="news-filter" type="button" data-news-filter="updates" aria-pressed="false">New cards & updates</button>
+        <button class="news-filter" type="button" data-news-filter="competitive" aria-pressed="false">Competitive</button>
+      </div>
+
+      <div id="news-grid" class="news-grid" aria-live="polite" aria-busy="true">
+        <div class="news-loading">
+          <span class="loader" aria-hidden="true"></span>
+          <p>Reading the royal bulletin…</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about shell" aria-labelledby="about-title">
+      <p class="section-kicker">Under the hood</p>
+      <h2 id="about-title">A focused analyzer, not a magic formula.</h2>
+      <p>
+        The score uses transparent rules around win conditions, air coverage,
+        spell support, and elixir cost. Use it as a deck-building checklist,
+        then refine your deck through real matches.
+      </p>
+    </section>
+
+    <footer class="site-footer shell">
+      <p>
+        Live card data comes from the Supercell API when configured, with catalog
+        fallback and artwork from
+        <a href="https://royaleapi.com" target="_blank" rel="noreferrer">RoyaleAPI</a>.
+        This fan project is not affiliated with Supercell.
+      </p>
+      <p>Built with HTML, CSS, and JavaScript.</p>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
